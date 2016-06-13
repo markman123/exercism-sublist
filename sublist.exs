@@ -5,27 +5,24 @@ defmodule Sublist do
   """
   def compare(a, b) do
     cond do
-      a == b                  -> :equal
-      a == []                 -> :sublist
-      b == []                 -> :superlist
-      a_in_b?(a,b,a,[],:true) -> :sublist
-      a_in_b?(b,a,b,[]f,:true) -> :superlist
-      true                    -> :unequal
+      a == b            -> :equal
+      a == []           -> :sublist
+      b == []           -> :superlist
+      a_in_b?(a,b,true) -> :sublist
+      a_in_b?(b,a,true) -> :superlist
+      true              -> :unequal
     end
   end
 
-  defp a_in_b?([],[],_,_,bool), do: bool
-  defp a_in_b?(_,[],_,_,_), do: false
-  defp a_in_b?([],_,_,_,bool), do: bool
+  defp a_in_b?([],[], bool), do: bool
+  defp a_in_b?(_,[],_), do: false
+  defp a_in_b?([],_,bool), do: bool
 
-  defp a_in_b?([a_head|a_tail], [b_head|b_tail],orig_a,match_b, _bool) do
+  defp a_in_b?(a = [a_head|a_tail], b = [b_head|b_tail], _bool) do
     if a_head === b_head do
-      if match_b == [] do
-        match_b = b_tail
-      end
-      a_in_b?(a_tail,b_tail,orig_a,match_b,true)
+      a_in_b?(a_tail,b_tail,true)
     else
-      a_in_b?(orig_a,match_b,orig_a,[],false)
+      a_in_b?(a,b_tail,false)
     end
   end
 end
